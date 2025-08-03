@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>XI-2 SMANSA</title>
-  <link rel="icon" href="ico.jpg" type="image/x-icon" />
-  <link rel="stylesheet" href="style.css?v=0.0.1" />
+  <link rel="icon" href="img/ico.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css?v=0.0.1" />
 </head>
 
 <body>
@@ -25,6 +25,7 @@
           <li><a href="#siswa" class="nav__link">Daftar Siswa</a></li>
           <li><a href="#agenda" class="nav__link">Agenda</a></li>
           <li><a href="#jadwal" class="nav__link">Jadwal</a></li>
+          <li><a href="#e-book" class="nav__link">E-Book</a></li>
         </ul>
       </nav>
     </div>
@@ -60,6 +61,8 @@
         <h2>Struktur Organisasi</h2>
         <ul id="list-roles" class="roles-list"></ul>
       </div>
+
+      <p id="qotd" class="qotd">nil</p>
     </section>
 
     <!-- SISWA -->
@@ -141,8 +144,27 @@
       </div>
     </section>
 
-    <p id="qotd" class="qotd">nil</p>
-
+    <!-- E-BOOK -->
+    <section id="e-book" class="section">
+      <div style="
+    margin: auto;
+    text-align: center;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+    box-sizing: border-box;
+  ">
+        <h1 style="color: #e74c3c; margin-bottom: 15px; font-size: 2.5em;">503<br>Service Unavailable</h1>
+        <p style="font-size: 1.1em; line-height: 1.6; margin-bottom: 20px;">Mohon maaf, terjadi masalah pada server saat
+          mencoba memproses permintaan Anda.</p>
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+        <p style="color: #777; font-size: 0.9em; margin-top: 30px;">nginx/1.18.0 (Ubuntu)</p>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -152,7 +174,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=0.0.1" defer></script>
+  <script src="js/script.js?v=0.0.1" defer></script>
 </body>
 
 </html>
