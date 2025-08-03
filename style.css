@@ -24,6 +24,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  height: 100%; /* Tambahkan ini */
 }
 
 body {
@@ -33,6 +34,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  display: flex; /* Tambahkan ini */
+  flex-direction: column; /* Tambahkan ini */
+  min-height: 100vh; /* Ubah dari height menjadi min-height */
 }
 
 /* Container */
@@ -156,11 +160,32 @@ body {
   display: block;
 }
 
+/* Main content area */
+main {
+  flex-grow: 1; /* Tambahkan ini */
+}
+
 /* Status Text */
 .status {
   text-align: center;
   font-style: italic;
   margin: 2rem 0;
+  color: var(--clr-primary);
+  font-weight: 500;
+}
+
+.qotd {
+  text-align: center;
+  font-style: italic;
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+  color: var(--clr-primary);
+  font-weight: 500;
+}
+
+.qotd-title {
+  text-align: center;
+  font-style: italic;
   color: var(--clr-primary);
   font-weight: 500;
 }

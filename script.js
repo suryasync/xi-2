@@ -239,7 +239,7 @@ function renderSiswa() {
       document.querySelectorAll('#table-siswa tbody tr').forEach(tr => {
         const piket = tr.children[3]?.textContent.toLowerCase();
         const role = tr.children[2]?.textContent.toLowerCase();
-        const isVisible = !filterVal || piket.includes(filterVal) || role.includes(filterVal) ;
+        const isVisible = !filterVal || piket.includes(filterVal) || role.includes(filterVal);
         tr.style.display = isVisible ? '' : 'none';
       });
     });
@@ -317,50 +317,84 @@ async function init() {
 }
 
 /// JAM SEKOLAH
-async function isHoliday(dateStr) {
-  const response = await fetch("https://raw.githubusercontent.com/guangrei/APIHariLibur_V2/main/holidays.json");
-  const holidays = await response.json();
-  return holidays.hasOwnProperty(dateStr);
+function getWIBTime() {
+  const now = new Date();
+  const wibString = now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
+  return new Date(wibString);
 }
 
-async function updateSchoolStatus() {
-  const nowUTC = new Date();
-  const wibOffset = 7 * 60;
-  const now = new Date(nowUTC.getTime() + wibOffset * 60000);
+function formatTimeRemaining(hoursDecimal) {
+  const totalSeconds = Math.round(hoursDecimal * 3600);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
 
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
-  const dateStr = `${yyyy}-${mm}-${dd}`;
+  const parts = [];
+  if (hours > 0) parts.push(`${hours} jam`);
+  if (minutes > 0 || hours > 0) parts.push(`${minutes} menit`);
+  parts.push(`${seconds} detik`);
 
-  const isLibur = await isHoliday(dateStr);
-  const day = now.getDay();
+  return parts.join(" ");
+}
+
+function updateSchoolStatus() {
+  const now = getWIBTime();
+
+  const day = now.getDay(); // 0 = Minggu, 6 = Sabtu
   const hour = now.getHours();
   const minute = now.getMinutes();
-  const currentTime = hour + minute / 60;
+  const second = now.getSeconds();
+  const currentTime = hour + minute / 60 + second / 3600;
+
+  const startTime = 6.5; // 06:30 WIB
+  const endTime = (day === 5) ? 12.0 : 15.0;
 
   let message = "";
 
-  if (day === 0 || day === 6 || isLibur) {
-    message = "🎉 Hari ini libur.";
-  } else {
-    const startTime = 6.5;
-    const endTime = (day === 5) ? 12.0 : 15.0;
-
+  if (day >= 1 && day <= 5) {
     if (currentTime < startTime) {
-      const hoursLeft = (startTime - currentTime).toFixed(1);
-      message = `🏫 Sekolah dimulai dalam ${hoursLeft} jam lagi.`;
+      const timeLeft = formatTimeRemaining(startTime - currentTime);
+      message = `🏫 Sekolah belum mulai. Mulai dalam ${timeLeft}.`;
     } else if (currentTime < endTime) {
-      const hoursLeft = (endTime - currentTime).toFixed(1);
-      message = `⏰ Sekolah akan selesai dalam ${hoursLeft} jam lagi.`;
+      const timeLeft = formatTimeRemaining(endTime - currentTime);
+      message = `⏰ Sekolah sedang berlangsung. Selesai dalam ${timeLeft}.`;
     } else {
       message = "✅ Sekolah sudah selesai hari ini.";
     }
+  } else {
+    const nextSchoolDay = new Date(now);
+    const daysToAdd = (day === 6) ? 2 : 1;
+    nextSchoolDay.setDate(now.getDate() + daysToAdd);
+    nextSchoolDay.setHours(6, 30, 0, 0);
+
+    const timeDiffMs = nextSchoolDay - now;
+    const timeDiffHours = timeDiffMs / (1000 * 60 * 60);
+    const timeLeft = formatTimeRemaining(timeDiffHours);
+
+    message = `📅 Hari ini libur. Sekolah dimulai dalam ${timeLeft}.`;
   }
 
   document.getElementById("school-status").innerText = message;
 }
 
-updateSchoolStatus();
+const quotes = [
+  "QOTD: Hidup itu seperti matematika, kadang harus diselesaikan dengan cara yang rumit.",
+  "QOTD: Kamu boleh merasa lelah, tetapi jangan pernah berpikir untuk menyerah.",
+  "QOTD: Jika kamu tidak menemukan orang baik, maka jadilah orang baik itu.",
+  "QOTD: Mimpimu mungkin terasa jauh, tetapi setiap langkah kecil membawamu lebih dekat.",
+  "QOTD: Jadikan masa lalu sebagai pelajaran, bukan sebagai penyesalan.",
+  "QOTD: Jangan takut gagal, selama itu bukan gagal ginjal.",
+  "QOTD: Masa depanmu ditentukan oleh apa yang kamu lakukan hari ini, bukan besok.",
+];
+
+function injectQuote() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  const quote = quotes[randomIndex];
+  document.getElementById("qotd").textContent = quote;
+}
+
+window.onload = injectQuote;
+
+setInterval(updateSchoolStatus, 1000);
 
 document.addEventListener('DOMContentLoaded', init);
