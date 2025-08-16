@@ -347,6 +347,21 @@ async function init() {
     homeLink.classList.add("nav__link--active");
     document.getElementById("home").classList.add("section--active");
   }
+
+  fetch(
+    "https://script.google.com/macros/s/AKfycbzNc_niti2bNuRCNnTu7PiPKrkTCJLGYr3tL3woSu3lAEQTdlfdyGIuT99QrX5Z2FBDhw/exec"
+  )
+    .then((res) => res.text())
+    .then((count) => {
+      document.getElementById(
+        "site-access"
+      ).innerText = `Total kunjungan situs: ${count}`;
+    })
+    .catch(() => {
+      document.getElementById(
+        "site-access"
+      ).innerText = `Total kunjungan situs: 0`;
+    });
 }
 
 /// JAM SEKOLAH
@@ -459,18 +474,3 @@ function updateSchoolStatus() {
 setInterval(updateSchoolStatus, 1000);
 
 document.addEventListener("DOMContentLoaded", init);
-
-fetch(
-  "https://script.google.com/macros/s/AKfycbzNc_niti2bNuRCNnTu7PiPKrkTCJLGYr3tL3woSu3lAEQTdlfdyGIuT99QrX5Z2FBDhw/exec"
-)
-  .then((res) => res.text())
-  .then((count) => {
-    document.getElementById(
-      "site-access"
-    ).innerText = `Total kunjungan situs: ${count}`;
-  })
-  .catch(() => {
-    document.getElementById(
-      "site-access"
-    ).innerText = `Total kunjungan situs: 0`;
-  });
