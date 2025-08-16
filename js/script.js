@@ -1,11 +1,11 @@
-const SHEET_ID = '1eF4Ct_Q3B2LUoJaGwcjUMeLcIIvKv_TqgnqlLPu1I28';
+const SHEET_ID = "1eF4Ct_Q3B2LUoJaGwcjUMeLcIIvKv_TqgnqlLPu1I28";
 const BASE_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?`;
 
 const SHEETS = {
-  siswa: 'Siswa',
-  pelajaran: 'Pelajaran',
-  agenda: 'Agenda',
-  jadwal: 'Jadwal'
+  siswa: "Siswa",
+  pelajaran: "Pelajaran",
+  agenda: "Agenda",
+  jadwal: "Jadwal",
 };
 
 const store = {};
@@ -19,9 +19,9 @@ async function fetchSheet(name) {
     const json = JSON.parse(text.match(/setResponse\(([\s\S]+)\)/)[1]);
     const cols = json.table.cols.map((c, i) => c.label || `col${i}`);
 
-    return json.table.rows.map(row =>
+    return json.table.rows.map((row) =>
       row.c.reduce((obj, cell, i) => {
-        obj[cols[i]] = cell && cell.v != null ? cell.v : '';
+        obj[cols[i]] = cell && cell.v != null ? cell.v : "";
         return obj;
       }, {})
     );
@@ -32,7 +32,7 @@ async function fetchSheet(name) {
 }
 
 function validRows(arr, key) {
-  return arr.filter(r => r[key] && String(r[key]).trim() !== '');
+  return arr.filter((r) => r[key] && String(r[key]).trim() !== "");
 }
 
 function countUp(el, target) {
@@ -54,12 +54,22 @@ function countUp(el, target) {
  */
 function formatTanggalIndonesia(date) {
   if (!date || isNaN(date.getTime())) {
-    return 'Tanggal Tidak Valid';
+    return "Tanggal Tidak Valid";
   }
 
   const bulan = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
   ];
 
   const hariKe = date.getDate();
@@ -74,20 +84,20 @@ function formatTanggalIndonesia(date) {
  * menjadi Date object lokal pada tengah malam.
  */
 function parseTanggal(input) {
-  if (input == null || input === '') return null;
+  if (input == null || input === "") return null;
 
   let dateObj = null;
 
   // 1) Jika input adalah serial number Google Sheets (days since 1899-12-30)
-  if (typeof input === 'number') {
+  if (typeof input === "number") {
     dateObj = new Date((input - 25569) * 86400000);
   }
   // 2) Jika input sudah Date object
-  else if (Object.prototype.toString.call(input) === '[object Date]') {
+  else if (Object.prototype.toString.call(input) === "[object Date]") {
     dateObj = new Date(input.getFullYear(), input.getMonth(), input.getDate());
   }
   // 3) Jika input adalah string
-  else if (typeof input === 'string') {
+  else if (typeof input === "string") {
     // 3a) Tangani format "Date(2025,5,1)"
     const match = input.match(/Date\((\d+),\s*(\d+),\s*(\d+)/);
     if (match) {
@@ -98,8 +108,8 @@ function parseTanggal(input) {
     }
     // 3b) Tangani "dd/mm/yyyy" atau "dd-mm-yyyy"
     else {
-      const parts = input.split(/[-\/]/).map(p => parseInt(p, 10));
-      if (parts.length === 3 && parts.every(n => !isNaN(n))) {
+      const parts = input.split(/[-\/]/).map((p) => parseInt(p, 10));
+      if (parts.length === 3 && parts.every((n) => !isNaN(n))) {
         const [dd, mm, yyyy] = parts;
         dateObj = new Date(yyyy, mm - 1, dd);
       }
@@ -117,49 +127,52 @@ function parseTanggal(input) {
 // Fungsi pembantu untuk membandingkan hanya tanggal (tanpa waktu)
 function isSameDay(date1, date2) {
   if (!date1 || !date2) return false;
-  return date1.getFullYear() === date2.getFullYear() &&
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
     date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate();
+    date1.getDate() === date2.getDate()
+  );
 }
 
 function renderHome() {
-  const siswaData = validRows(store.siswa, 'Nama');
-  const pelajaranData = validRows(store.pelajaran, 'Pelajaran');
-  const agendaData = validRows(store.agenda, 'Tanggal');
+  const siswaData = validRows(store.siswa, "Nama");
+  const pelajaranData = validRows(store.pelajaran, "Pelajaran");
+  const agendaData = validRows(store.agenda, "Tanggal");
 
-  countUp(document.getElementById('count-siswa'), siswaData.length);
-  countUp(document.getElementById('count-pelajaran'), pelajaranData.length);
+  countUp(document.getElementById("count-siswa"), siswaData.length);
+  countUp(document.getElementById("count-pelajaran"), pelajaranData.length);
+  countUp(document.getElementById("count-agenda"), agendaData.length);
 
-  const listToday = document.getElementById('list-agenda-today');
-  const listTomorrow = document.getElementById('list-agenda-tomorrow');
-  listToday.innerHTML = '';
-  listTomorrow.innerHTML = '';
+  const listToday = document.getElementById("list-agenda-today");
+  const listTomorrow = document.getElementById("list-agenda-tomorrow");
+  listToday.innerHTML = "";
+  listTomorrow.innerHTML = "";
 
   const now = new Date();
   const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const tomorrowLocal = new Date(todayLocal);
   tomorrowLocal.setDate(todayLocal.getDate() + 1);
 
-  const todayLabel = document.createElement('li');
+  const todayLabel = document.createElement("li");
   todayLabel.textContent = formatTanggalIndonesia(todayLocal);
-  todayLabel.style.fontWeight = 'bold';
+  todayLabel.style.fontWeight = "bold";
   listToday.appendChild(todayLabel);
 
-  const tomorrowLabel = document.createElement('li');
+  const tomorrowLabel = document.createElement("li");
   tomorrowLabel.textContent = formatTanggalIndonesia(tomorrowLocal);
-  tomorrowLabel.style.fontWeight = 'bold';
+  tomorrowLabel.style.fontWeight = "bold";
   listTomorrow.appendChild(tomorrowLabel);
 
   let foundToday = false;
   let foundTomorrow = false;
 
-  agendaData.forEach(item => {
+  agendaData.forEach((item) => {
     const agendaDate = parseTanggal(item.Tanggal);
     if (!agendaDate) return;
 
-    const li = document.createElement('li');
+    const li = document.createElement("li");
     li.textContent = `${item.MataPelajaran}: ${item.Keterangan}`;
-    li.classList.add('agenda-item');
+    li.classList.add("agenda-item");
 
     if (isSameDay(agendaDate, todayLocal)) {
       listToday.appendChild(li);
@@ -172,25 +185,25 @@ function renderHome() {
   });
 
   if (!foundToday) {
-    const li = document.createElement('li');
-    li.textContent = 'Tidak ada agenda untuk hari ini.';
-    li.classList.add('agenda-item');
+    const li = document.createElement("li");
+    li.textContent = "Tidak ada agenda untuk hari ini.";
+    li.classList.add("agenda-item");
     listToday.appendChild(li);
   }
   if (!foundTomorrow) {
-    const li = document.createElement('li');
-    li.textContent = 'Tidak ada agenda untuk besok.';
-    li.classList.add('agenda-item');
+    const li = document.createElement("li");
+    li.textContent = "Tidak ada agenda untuk besok.";
+    li.classList.add("agenda-item");
     listTomorrow.appendChild(li);
   }
 
-  const listRoles = document.getElementById('list-roles');
-  listRoles.innerHTML = '';
+  const listRoles = document.getElementById("list-roles");
+  listRoles.innerHTML = "";
   siswaData
-    .filter(item => item.Role)
+    .filter((item) => item.Role)
     .sort((a, b) => a.Role.localeCompare(b.Role))
-    .forEach(item => {
-      const li = document.createElement('li');
+    .forEach((item) => {
+      const li = document.createElement("li");
       li.textContent = `${item.Role} – ${item.Nama}`;
       listRoles.appendChild(li);
     });
@@ -199,18 +212,18 @@ function renderHome() {
 function renderTable(tableId, data, columns) {
   const tbody = document.querySelector(`#${tableId} tbody`);
   if (!tbody) return;
-  tbody.innerHTML = '';
-  data.forEach(row => {
-    const tr = document.createElement('tr');
-    columns.forEach(col => {
-      const td = document.createElement('td');
-      if (col === 'Tanggal' && row[col]) {
+  tbody.innerHTML = "";
+  data.forEach((row) => {
+    const tr = document.createElement("tr");
+    columns.forEach((col) => {
+      const td = document.createElement("td");
+      if (col === "Tanggal" && row[col]) {
         const parsedDate = parseTanggal(row[col]);
         td.textContent = parsedDate
           ? formatTanggalIndonesia(parsedDate)
           : row[col];
       } else {
-        td.textContent = row[col] || '';
+        td.textContent = row[col] || "";
       }
       tr.appendChild(td);
     });
@@ -219,79 +232,101 @@ function renderTable(tableId, data, columns) {
 }
 
 function renderSiswa() {
-  const data = validRows(store.siswa, 'Nama');
-  renderTable('table-siswa', data, ['NIS', 'Nama', 'Role', 'Piket']);
+  const data = validRows(store.siswa, "Nama");
+  renderTable("table-siswa", data, ["NIS", "Nama", "Role", "Piket"]);
 
-  const searchInput = document.getElementById('search');
+  const searchInput = document.getElementById("search");
   if (searchInput) {
-    searchInput.addEventListener('input', e => {
+    searchInput.addEventListener("input", (e) => {
       const term = e.target.value.toLowerCase();
-      document.querySelectorAll('#table-siswa tbody tr').forEach(tr => {
-        tr.style.display = tr.textContent.toLowerCase().includes(term) ? '' : 'none';
+      document.querySelectorAll("#table-siswa tbody tr").forEach((tr) => {
+        tr.style.display = tr.textContent.toLowerCase().includes(term)
+          ? ""
+          : "none";
       });
     });
   }
 
-  const filterSelect = document.getElementById('filter-piket');
+  const filterSelect = document.getElementById("filter-piket");
   if (filterSelect) {
-    filterSelect.addEventListener('change', () => {
+    filterSelect.addEventListener("change", () => {
       const filterVal = filterSelect.value.toLowerCase();
-      document.querySelectorAll('#table-siswa tbody tr').forEach(tr => {
+      document.querySelectorAll("#table-siswa tbody tr").forEach((tr) => {
         const piket = tr.children[3]?.textContent.toLowerCase();
         const role = tr.children[2]?.textContent.toLowerCase();
-        const isVisible = !filterVal || piket.includes(filterVal) || role.includes(filterVal);
-        tr.style.display = isVisible ? '' : 'none';
+        const isVisible =
+          !filterVal || piket.includes(filterVal) || role.includes(filterVal);
+        tr.style.display = isVisible ? "" : "none";
       });
     });
   }
 }
 
 function renderAgendaSection() {
-  const data = validRows(store.agenda, 'Tanggal')
-    .map(item => ({ ...item, _parsed: parseTanggal(item.Tanggal) }))
+  const data = validRows(store.agenda, "Tanggal")
+    .map((item) => ({ ...item, _parsed: parseTanggal(item.Tanggal) }))
     .sort((b, a) => a._parsed - b._parsed);
 
-  renderTable('table-agenda', data, ['Tanggal', 'MataPelajaran', 'Keterangan']);
+  renderTable("table-agenda", data, ["Tanggal", "MataPelajaran", "Keterangan"]);
 
-  const filterInput = document.getElementById('filter-agenda-tanggal');
+  const filterInput = document.getElementById("filter-agenda-tanggal");
   if (filterInput) {
-    filterInput.addEventListener('input', () => {
+    filterInput.addEventListener("input", () => {
       const selected = filterInput.value;
       if (!selected) {
-        renderTable('table-agenda', data, ['Tanggal', 'MataPelajaran', 'Keterangan']);
+        renderTable("table-agenda", data, [
+          "Tanggal",
+          "MataPelajaran",
+          "Keterangan",
+        ]);
         return;
       }
 
-      const selectedDate = new Date(selected + 'T00:00:00');
-      const filtered = data.filter(item =>
-        item._parsed && isSameDay(item._parsed, selectedDate)
+      const selectedDate = new Date(selected + "T00:00:00");
+      const filtered = data.filter(
+        (item) => item._parsed && isSameDay(item._parsed, selectedDate)
       );
 
-      renderTable('table-agenda', filtered, ['Tanggal', 'MataPelajaran', 'Keterangan']);
+      renderTable("table-agenda", filtered, [
+        "Tanggal",
+        "MataPelajaran",
+        "Keterangan",
+      ]);
     });
   }
 }
 
 function renderJadwal() {
-  const data = validRows(store.jadwal, 'Jam');
-  renderTable('table-jadwal', data, ['Jam', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat']);
+  const data = validRows(store.jadwal, "Jam");
+  renderTable("table-jadwal", data, [
+    "Jam",
+    "Senin",
+    "Selasa",
+    "Rabu",
+    "Kamis",
+    "Jumat",
+  ]);
 }
 
 function initNav() {
-  document.querySelectorAll('.nav__link').forEach(link => {
-    link.addEventListener('click', e => {
+  document.querySelectorAll(".nav__link").forEach((link) => {
+    link.addEventListener("click", (e) => {
       e.preventDefault();
-      document.querySelectorAll('.nav__link').forEach(l => l.classList.remove('nav__link--active'));
-      link.classList.add('nav__link--active');
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('section--active'));
-      const target = link.getAttribute('href').substring(1);
+      document
+        .querySelectorAll(".nav__link")
+        .forEach((l) => l.classList.remove("nav__link--active"));
+      link.classList.add("nav__link--active");
+      document
+        .querySelectorAll(".section")
+        .forEach((s) => s.classList.remove("section--active"));
+      const target = link.getAttribute("href").substring(1);
       const section = document.getElementById(target);
-      if (section) section.classList.add('section--active');
+      if (section) section.classList.add("section--active");
 
-      if (target === 'home') renderHome();
-      if (target === 'siswa') renderSiswa();
-      if (target === 'agenda') renderAgendaSection();
-      if (target === 'jadwal') renderJadwal();
+      if (target === "home") renderHome();
+      if (target === "siswa") renderSiswa();
+      if (target === "agenda") renderAgendaSection();
+      if (target === "jadwal") renderJadwal();
     });
   });
 }
@@ -299,7 +334,7 @@ function initNav() {
 async function init() {
   const promises = Object.values(SHEETS).map(fetchSheet);
   const results = await Promise.all(promises);
-  Object.keys(SHEETS).forEach((key, i) => store[key] = results[i]);
+  Object.keys(SHEETS).forEach((key, i) => (store[key] = results[i]));
 
   renderHome();
   renderSiswa();
@@ -309,8 +344,8 @@ async function init() {
 
   const homeLink = document.querySelector('.nav__link[href="#home"]');
   if (homeLink) {
-    homeLink.classList.add('nav__link--active');
-    document.getElementById('home').classList.add('section--active');
+    homeLink.classList.add("nav__link--active");
+    document.getElementById("home").classList.add("section--active");
   }
 
   console.log(store);
@@ -318,9 +353,29 @@ async function init() {
 
 /// JAM SEKOLAH
 function getWIBTime() {
-  const now = new Date();
-  const wibString = now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
-  return new Date(wibString);
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jakarta",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(new Date());
+  const obj = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+
+  return new Date(
+    `${obj.year}-${obj.month.padStart(2, "0")}-${obj.day.padStart(
+      2,
+      "0"
+    )}T${obj.hour.padStart(2, "0")}:${obj.minute.padStart(
+      2,
+      "0"
+    )}:${obj.second.padStart(2, "0")}`
+  );
 }
 
 function formatTimeRemaining(hoursDecimal) {
@@ -337,6 +392,24 @@ function formatTimeRemaining(hoursDecimal) {
   return parts.join(" ");
 }
 
+// Daftar hari libur nasional
+const holidays = [
+  new Date("2025-08-17"), // Hari Kemerdekaan
+  new Date("2025-08-18"), // Cuti Bersama Hari Kemerdekaan
+  new Date("2025-09-05"), // Maulid Nabi Muhammad SAW
+  new Date("2025-12-25"), // Hari Natal
+  new Date("2025-12-26"), // Cuti Bersama Hari Natal
+];
+
+function isHoliday(date) {
+  return holidays.some(
+    (holiday) =>
+      holiday.getDate() === date.getDate() &&
+      holiday.getMonth() === date.getMonth() &&
+      holiday.getFullYear() === date.getFullYear()
+  );
+}
+
 function updateSchoolStatus() {
   const now = getWIBTime();
 
@@ -347,11 +420,13 @@ function updateSchoolStatus() {
   const currentTime = hour + minute / 60 + second / 3600;
 
   const startTime = 6.5; // 06:30 WIB
-  const endTime = (day === 5) ? 12.0 : 15.0;
+  const endTime = day === 5 ? 12.0 : 15.0;
 
   let message = "";
 
-  if (day >= 1 && day <= 5) {
+  if (isHoliday(now)) {
+    message = `📅 Hari ini libur. Sekolah dimulai dalam ${timeLeft}.`;
+  } else if (day >= 1 && day <= 5) {
     if (currentTime < startTime) {
       const timeLeft = formatTimeRemaining(startTime - currentTime);
       message = `🏫 Sekolah belum mulai. Mulai dalam ${timeLeft}.`;
@@ -362,9 +437,15 @@ function updateSchoolStatus() {
       message = "✅ Sekolah sudah selesai hari ini.";
     }
   } else {
-    const nextSchoolDay = new Date(now);
-    const daysToAdd = (day === 6) ? 2 : 1;
-    nextSchoolDay.setDate(now.getDate() + daysToAdd);
+    let nextSchoolDay = new Date(now);
+    do {
+      nextSchoolDay.setDate(nextSchoolDay.getDate() + 1);
+    } while (
+      nextSchoolDay.getDay() === 0 || // Minggu
+      nextSchoolDay.getDay() === 6 || // Sabtu
+      isHoliday(nextSchoolDay) // Libur nasional
+    );
+
     nextSchoolDay.setHours(6, 30, 0, 0);
 
     const timeDiffMs = nextSchoolDay - now;
@@ -377,24 +458,6 @@ function updateSchoolStatus() {
   document.getElementById("school-status").innerText = message;
 }
 
-const quotes = [
-  "QOTD: Hidup itu seperti matematika, kadang harus diselesaikan dengan cara yang rumit.",
-  "QOTD: Kamu boleh merasa lelah, tetapi jangan pernah berpikir untuk menyerah.",
-  "QOTD: Jika kamu tidak menemukan orang baik, maka jadilah orang baik itu.",
-  "QOTD: Mimpimu mungkin terasa jauh, tetapi setiap langkah kecil membawamu lebih dekat.",
-  "QOTD: Jadikan masa lalu sebagai pelajaran, bukan sebagai penyesalan.",
-  "QOTD: Jangan takut gagal, selama itu bukan gagal ginjal.",
-  "QOTD: Masa depanmu ditentukan oleh apa yang kamu lakukan hari ini, bukan besok.",
-];
-
-function injectQuote() {
-  const randomIndex = Math.floor(Math.random() * quotes.length);
-  const quote = quotes[randomIndex];
-  document.getElementById("qotd").textContent = quote;
-}
-
-window.onload = injectQuote;
-
 setInterval(updateSchoolStatus, 1000);
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener("DOMContentLoaded", init);
