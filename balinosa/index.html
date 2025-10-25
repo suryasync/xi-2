@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Echoes Beyond</title>
+    <meta name="description" content="Echoes Beyond - Segera Hadir." />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://static.thenounproject.com/png/coming-soon-icon-7086994-512.png"
+    />
+    <style>
+      :root {
+        --bg: #0b1220;
+        --text: #e6eef8;
+        --muted: #9aa4b2;
+        --accent: #04ad96;
+        --maxw: 760px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: linear-gradient(180deg, #eb4a5c 0%, #0b1220 100%);
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .wrap {
+        width: 100%;
+        max-width: var(--maxw);
+        text-align: center;
+        padding: 36px 20px;
+      }
+
+      .brand {
+        font-weight: 800;
+        letter-spacing: 2px;
+        font-size: 1.25rem;
+        color: var(--accent);
+        margin: 0 0 14px 0;
+      }
+
+      h1.title {
+        margin: 0 0 12px 0;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      p.lead {
+        margin: 0 0 22px 0;
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .count {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+      .unit {
+        min-width: 64px;
+        padding: 12px 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      .num {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--text);
+      }
+      .lbl {
+        margin-top: 6px;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 0.88rem;
+        margin-top: 6px;
+      }
+
+      @media (max-width: 420px) {
+        .count {
+          gap: 8px;
+        }
+        .unit {
+          min-width: 54px;
+          padding: 10px 8px;
+        }
+        .brand {
+          font-size: 1rem;
+        }
+        h1.title {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap" role="main" aria-labelledby="site-title">
+      <div class="brand" id="site-title">ECHOES BEYOND</div>
+      <h1 class="title">Kami sedang mempersiapkan sesuatu yang spesial.</h1>
+
+      <div class="count" role="group" aria-label="Countdown hingga rilis">
+        <div class="unit">
+          <div id="days" class="num">00</div>
+          <div class="lbl">Hari</div>
+        </div>
+        <div class="unit">
+          <div id="hours" class="num">00</div>
+          <div class="lbl">Jam</div>
+        </div>
+        <div class="unit">
+          <div id="minutes" class="num">00</div>
+          <div class="lbl">Menit</div>
+        </div>
+        <div class="unit">
+          <div id="seconds" class="num">00</div>
+          <div class="lbl">Detik</div>
+        </div>
+      </div>
+
+      <footer>© <span id="year"></span> Echoes Beyond</footer>
+    </main>
+
+    <script>
+      // Ubah tanggal rilis di sini (format ISO)
+      const LAUNCH_DATE = new Date("2025-10-30");
+
+      const daysEl = document.getElementById("days");
+      const hoursEl = document.getElementById("hours");
+      const minutesEl = document.getElementById("minutes");
+      const secondsEl = document.getElementById("seconds");
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      function updateCountdown() {
+        const now = new Date();
+        let diff = Math.max(0, LAUNCH_DATE - now);
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -= days * (1000 * 60 * 60 * 24);
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        diff -= hours * (1000 * 60 * 60);
+        const minutes = Math.floor(diff / (1000 * 60));
+        diff -= minutes * (1000 * 60);
+        const seconds = Math.floor(diff / 1000);
+
+        daysEl.textContent = String(days).padStart(2, "0");
+        hoursEl.textContent = String(hours).padStart(2, "0");
+        minutesEl.textContent = String(minutes).padStart(2, "0");
+        secondsEl.textContent = String(seconds).padStart(2, "0");
+
+        if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+          clearInterval(timer);
+          document.querySelector(".title").textContent = "Sudah Live";
+        }
+      }
+
+      updateCountdown();
+      const timer = setInterval(updateCountdown, 1000);
+    </script>
+  </body>
+</html>
