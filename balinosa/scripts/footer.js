@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("footer.html")
+  fetch("/xi-2/balinosa/footer.html")
     .then((res) => {
       if (!res.ok) throw new Error("Footer not found");
       return res.text();
