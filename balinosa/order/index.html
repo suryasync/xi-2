@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Echoes Beyond - Order</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/balinosa//styles/main.css?v=0.0.1" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/balinosa/assets/image/favicon.ico"
+    />
+    <style>
+      .main-content {
+        padding: 2.5rem 0 3.5rem;
+        max-width: 1100px;
+        margin-inline: auto;
+        text-align: left;
+      }
+
+      h2.page-title {
+        font-weight: 700;
+        font-size: 1.9rem;
+        color: #eb4a5c;
+        margin-bottom: 0.6rem;
+        text-align: center;
+      }
+
+      .view-menu-wrap {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+      }
+
+      .btn-view-menu {
+        background: #fff;
+        border: 1px solid #e6eefc;
+        color: #04ad96;
+        padding: 0.6rem 0.9rem;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+        text-decoration: none;
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
+        gap: 0.9rem;
+        width: 100%;
+        align-items: start;
+        justify-items: stretch;
+      }
+
+      @media (max-width: 520px) {
+        .menu-grid {
+          grid-template-columns: 1fr;
+          gap: 0.7rem;
+          justify-items: center;
+          padding-inline: 6px;
+        }
+      }
+
+      .menu-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 0.85rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        width: 100%;
+        min-height: 72px;
+        overflow: hidden;
+        transition: box-shadow 0.2s ease, transform 0.15s ease;
+        max-width: 560px;
+        box-sizing: border-box;
+      }
+
+      .menu-card:hover,
+      .menu-card:focus-within {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+        outline: none;
+      }
+
+      .menu-thumb {
+        flex: 0 0 clamp(56px, 18%, 92px);
+        height: auto;
+        aspect-ratio: 4/3;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #e6eefc, #fff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000000;
+        font-weight: 700;
+        font-size: 0.95rem;
+        overflow: hidden;
+        user-select: none;
+      }
+
+      .menu-info {
+        flex: 1 1 0;
+        min-width: 0;
+        overflow: hidden;
+      }
+
+      .menu-name {
+        font-weight: 700;
+        color: #eb4a5c;
+        margin: 0 0 0.25rem 0;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .menu-desc {
+        margin: 0;
+        color: #555;
+        font-size: 0.92rem;
+        line-height: 1.35;
+        display: -webkit-box;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .menu-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 0 0 auto;
+        margin-left: 0.25rem;
+      }
+
+      .btn-add {
+        background: #04ad96;
+        color: #fff;
+        border: none;
+        padding: 0.38rem 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(4, 173, 150, 0.18);
+      }
+
+      .cart-panel {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: min(360px, calc(100% - 48px));
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        z-index: 1200;
+        box-sizing: border-box;
+        transition: width 180ms ease, transform 180ms ease;
+        pointer-events: auto;
+      }
+
+      .cart-panel.collapsed {
+        width: min(360px, calc(100% - 48px));
+        left: auto;
+        right: 20px;
+        transform: none;
+      }
+
+      .cart-panel.collapsed .cart-body,
+      .cart-panel.collapsed .cart-footer {
+        display: none;
+      }
+
+      .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.85rem 1rem;
+        background: linear-gradient(90deg, #fff, #f7fbff);
+        border-bottom: 1px solid #eef3fb;
+      }
+
+      .cart-title {
+        font-weight: 700;
+        color: #000000;
+        font-size: 1rem;
+      }
+
+      .cart-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .cart-count {
+        background: #04ad96;
+        color: #fff;
+        font-weight: 700;
+        padding: 0.18rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        min-width: 28px;
+        text-align: center;
+        display: none;
+      }
+
+      .cart-toggle {
+        position: relative;
+        z-index: 1300;
+        background: transparent;
+        border: 1px solid #e6eefc;
+        color: #000000;
+        width: 34px;
+        height: 28px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cart-body {
+        padding: 0.75rem 1rem;
+        max-height: 300px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .cart-item {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        padding: 0.45rem 0;
+        border-bottom: 1px dashed #eef3fb;
+      }
+
+      .cart-item:last-child {
+        border-bottom: none;
+      }
+
+      .ci-left {
+        min-width: 44px;
+        max-width: 44px;
+        height: 36px;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #eef6ff, #fff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #eb4a5c;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+      }
+
+      .ci-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+        overflow: hidden;
+      }
+
+      .ci-name {
+        font-weight: 600;
+        color: #222;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .ci-meta {
+        color: #666;
+        font-size: 0.82rem;
+      }
+
+      .qty-controls {
+        margin-left: auto;
+        display: flex;
+        gap: 0.35rem;
+        align-items: center;
+      }
+
+      .qty-btn {
+        width: 30px;
+        height: 28px;
+        border-radius: 6px;
+        border: 1px solid #e6eefc;
+        background: #fff;
+        color: #000000;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .qty-display {
+        min-width: 28px;
+        text-align: center;
+        font-weight: 600;
+        color: #222;
+      }
+
+      .cart-footer {
+        padding: 0.8rem 1rem;
+        border-top: 1px solid #eef3fb;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        background: linear-gradient(180deg, #fff, #f8fffa);
+      }
+
+      .cart-total {
+        font-weight: 700;
+        color: #222;
+        flex: 1;
+        font-size: 1rem;
+      }
+
+      .btn-checkout {
+        background: #10b981;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 0.85rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .btn-clear {
+        background: transparent;
+        color: #ef4444;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .empty-note {
+        color: #777;
+        text-align: center;
+        padding: 0.9rem 0.5rem;
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 880px) {
+        .cart-panel {
+          width: min(320px, calc(100% - 40px));
+          right: 16px;
+          bottom: 16px;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .cart-panel {
+          left: 50%;
+          right: auto;
+          transform: translateX(-50%);
+          bottom: 12px;
+          width: calc(100% - 36px);
+          max-width: 680px;
+          border-radius: 10px;
+        }
+
+        .menu-card {
+          max-width: 680px;
+          padding: 0.7rem;
+        }
+
+        .menu-grid {
+          justify-items: center;
+        }
+
+        .menu-thumb {
+          flex: 0 0 64px;
+          aspect-ratio: 4/3;
+        }
+
+        .cart-body {
+          max-height: 220px;
+        }
+
+        .cart-panel.collapsed {
+          left: 50%;
+          right: auto;
+          transform: translateX(-50%);
+          width: calc(100% - 32px);
+          bottom: 12px;
+          max-width: 640px;
+          border-radius: 10px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .menu-name {
+          font-size: 0.95rem;
+        }
+
+        .menu-desc {
+          font-size: 0.85rem;
+        }
+
+        .btn-add {
+          padding: 0.32rem 0.56rem;
+          font-size: 0.9rem;
+        }
+
+        .cart-footer {
+          padding: 0.6rem 0.75rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="header" role="banner">
+      <div class="container header-inner">
+        <a href="/balinosa/" class="logo-link" aria-label="Echoes Beyond Home"
+          ><span class="studio-name">Echoes Beyond | XI-2</span></a
+        >
+        <button
+          class="nav-toggle"
+          aria-controls="primary-navigation"
+          aria-expanded="false"
+          aria-label="Toggle navigation menu"
+        >
+          <span class="hamburger"></span>
+        </button>
+        <nav id="primary-navigation" class="nav" role="navigation">
+          <ul class="nav-list">
+            <li><a href="/balinosa/" class="nav-link">Home</a></li>
+            <li>
+              <a id="spinwheel" href="" class="nav-link">Spin Wheel</a>
+            </li>
+            <li>
+              <a href="/balinosa/order/" class="nav-link" aria-current="page"
+                >Order</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container main-content" role="main">
+      <h2 class="page-title">Menu & Order</h2>
+
+      <div class="view-menu-wrap">
+        <a
+          id="btnViewMenu"
+          class="btn-view-menu"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          >View Menu</a
+        >
+      </div>
+
+      <ul class="menu-grid" id="menuGrid"></ul>
+
+      <p
+        style="
+          margin-top: 1.25rem;
+          color: #555;
+          font-size: 0.95rem;
+          text-align: center;
+        "
+      >
+        Add items to your cart and click Checkout to send your order via
+        WhatsApp.
+      </p>
+    </main>
+
+    <aside
+      class="cart-panel expanded"
+      id="cartPanel"
+      aria-live="polite"
+      aria-label="Shopping cart"
+    >
+      <div class="cart-header">
+        <div style="display: flex; gap: 10px; align-items: center">
+          <div class="cart-title">Cart</div>
+          <div class="cart-count" id="cartCount">0</div>
+        </div>
+        <div class="cart-actions">
+          <button class="btn-clear" id="clearCartBtn" title="Remove all">
+            Empty
+          </button>
+          <button
+            class="cart-toggle"
+            id="cartToggle"
+            aria-expanded="true"
+            aria-label="Toggle cart"
+          >
+            —
+          </button>
+        </div>
+      </div>
+
+      <div class="cart-body" id="cartBody">
+        <div class="empty-note" id="emptyNote">
+          Empty cart. Add items from the menu.
+        </div>
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-total" id="cartTotal">Total: Rp 0</div>
+        <button class="btn-checkout" id="checkoutBtn">Checkout</button>
+      </div>
+    </aside>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+      const MENU_LINK = "/balinosa/pdfviewer/web/viewer.html?file=";
+      const BUSINESS_PHONE = "";
+
+      const MENU = [
+        {
+          id: "m1",
+          name: "nil",
+          price: 0,
+          desc: "nil",
+        },
+        {
+          id: "m2",
+          name: "nil",
+          price: 0,
+          desc: "nil",
+        },
+        {
+          id: "m3",
+          name: "nil",
+          price: 0,
+          desc: "nil",
+        },
+      ];
+
+      const cart = {};
+      const formatRupiah = (n) =>
+        "Rp " + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+      const menuGrid = document.getElementById("menuGrid");
+      const cartBody = document.getElementById("cartBody");
+      const cartTotalEl = document.getElementById("cartTotal");
+      const emptyNote = document.getElementById("emptyNote");
+      const cartPanel = document.getElementById("cartPanel");
+      const cartToggle = document.getElementById("cartToggle");
+      const cartCountEl = document.getElementById("cartCount");
+      const clearBtn = document.getElementById("clearCartBtn");
+      const checkoutBtn = document.getElementById("checkoutBtn");
+      const btnViewMenu = document.getElementById("btnViewMenu");
+
+      btnViewMenu.href = MENU_LINK;
+
+      function renderMenu() {
+        menuGrid.innerHTML = "";
+        MENU.forEach((m) => {
+          const li = document.createElement("li");
+          li.className = "menu-card";
+          const initials = m.name
+            .split(" ")
+            .slice(0, 2)
+            .map((w) => w[0])
+            .join("");
+          li.innerHTML = `
+            <div class="menu-thumb">${initials}</div>
+            <div class="menu-info">
+              <p class="menu-name">${m.name}</p>
+              <p class="menu-desc">${m.desc}</p>
+              <p style="margin:0.45rem 0 0 0;font-weight:700;color:#222">${formatRupiah(
+                m.price
+              )}</p>
+            </div>
+            <div class="menu-actions">
+              <button class="btn-add" data-id="${m.id}">Add</button>
+            </div>
+          `;
+          menuGrid.appendChild(li);
+        });
+
+        document.querySelectorAll(".btn-add").forEach((btn) => {
+          btn.addEventListener("click", (e) =>
+            addToCart(e.currentTarget.dataset.id, 1)
+          );
+        });
+      }
+
+      function addToCart(id, qty = 1) {
+        const item = MENU.find((m) => m.id === id);
+        if (!item) return;
+        if (!cart[id]) cart[id] = { item, qty: 0 };
+        cart[id].qty += qty;
+        if (cart[id].qty < 1) delete cart[id];
+        saveCart();
+        renderCart();
+      }
+
+      function setQty(id, qty) {
+        if (!cart[id]) return;
+        cart[id].qty = qty;
+        if (cart[id].qty < 1) delete cart[id];
+        saveCart();
+        renderCart();
+      }
+
+      function removeFromCart(id) {
+        delete cart[id];
+        saveCart();
+        renderCart();
+      }
+
+      function clearCart() {
+        for (const k in cart) delete cart[k];
+        saveCart();
+        renderCart();
+      }
+
+      function cartTotal() {
+        return Object.values(cart).reduce(
+          (s, c) => s + c.item.price * c.qty,
+          0
+        );
+      }
+
+      function renderCart() {
+        const entries = Object.values(cart);
+        cartBody.innerHTML = "";
+        if (entries.length === 0) {
+          emptyNote.style.display = "block";
+          cartBody.appendChild(emptyNote);
+        } else {
+          emptyNote.style.display = "none";
+          entries.forEach((c) => {
+            const row = document.createElement("div");
+            row.className = "cart-item";
+            row.innerHTML = `
+              <div class="ci-info">
+                <div class="ci-name">${c.item.name}</div>
+                <div class="ci-meta">${formatRupiah(c.item.price)} / pcs</div>
+              </div>
+              <div class="qty-controls" data-id="${c.item.id}">
+                <button class="qty-btn btn-decrease" aria-label="Decrease">−</button>
+                <div class="qty-display">${c.qty}</div>
+                <button class="qty-btn btn-increase" aria-label="Increase">+</button>
+                <button class="qty-btn btn-remove" title="Remove" style="margin-left:8px;color:#ef4444;border-color:#fbe9e9">✕</button>
+              </div>
+            `;
+            cartBody.appendChild(row);
+          });
+
+          cartBody.querySelectorAll(".qty-controls").forEach((ctrl) => {
+            const id = ctrl.getAttribute("data-id");
+            ctrl
+              .querySelector(".btn-increase")
+              .addEventListener("click", () => addToCart(id, 1));
+            ctrl
+              .querySelector(".btn-decrease")
+              .addEventListener("click", () =>
+                setQty(id, Math.max(0, (cart[id]?.qty || 0) - 1))
+              );
+            ctrl
+              .querySelector(".btn-remove")
+              .addEventListener("click", () => removeFromCart(id));
+          });
+        }
+
+        cartTotalEl.textContent = "Total: " + formatRupiah(cartTotal());
+        updateCartCountBadge();
+        if (window.innerWidth <= 520 && Object.values(cart).length >= 4)
+          collapseCart();
+      }
+
+      function buildOrderMessage() {
+        const lines = ["Pesanan Echoes Beyond:"];
+        let i = 1;
+        for (const k of Object.keys(cart)) {
+          const c = cart[k];
+          lines.push(
+            `${i}. ${c.item.name} x${c.qty} — ${formatRupiah(
+              c.item.price * c.qty
+            )}`
+          );
+          i++;
+        }
+        lines.push(
+          "",
+          `Subtotal: ${formatRupiah(cartTotal())}`,
+          "",
+          "Nama: ",
+          "Alamat/Detail: ",
+          "Catatan: "
+        );
+        return encodeURIComponent(lines.join("\n"));
+      }
+
+      checkoutBtn.addEventListener("click", () => {
+        if (cartTotal() === 0) {
+          alert("Your cart is empty. Please add items first.");
+          return;
+        }
+        window.open(
+          `https://wa.me/${BUSINESS_PHONE}?text=${buildOrderMessage()}`,
+          "_blank"
+        );
+      });
+
+      clearBtn.addEventListener("click", () => {
+        if (confirm("Empty the cart?")) clearCart();
+      });
+
+      function updateCartCountBadge() {
+        const count = Object.values(cart).reduce((s, c) => s + (c.qty || 0), 0);
+        cartCountEl.textContent = count;
+        cartCountEl.style.display = count > 0 ? "inline-block" : "none";
+      }
+
+      function expandCart() {
+        cartPanel.classList.remove("collapsed");
+        cartPanel.classList.add("expanded");
+        cartToggle.textContent = "—";
+        cartToggle.setAttribute("aria-expanded", "true");
+      }
+
+      function collapseCart() {
+        cartPanel.classList.add("collapsed");
+        cartPanel.classList.remove("expanded");
+        cartToggle.textContent = "+";
+        cartToggle.setAttribute("aria-expanded", "false");
+      }
+
+      expandCart();
+      cartToggle.addEventListener("click", () =>
+        cartPanel.classList.contains("collapsed")
+          ? expandCart()
+          : collapseCart()
+      );
+
+      const mobileQuery = window.matchMedia("(max-width: 520px)");
+      let lastScroll = window.scrollY,
+        scrollTimeout = null;
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!mobileQuery.matches) {
+            lastScroll = window.scrollY;
+            return;
+          }
+          const cur = window.scrollY;
+          if (Math.abs(cur - lastScroll) < 8) return;
+          if (cur > lastScroll + 10) {
+            if (!cartPanel.classList.contains("collapsed")) collapseCart();
+          } else if (cur < lastScroll - 20) {
+            if (cartPanel.classList.contains("collapsed")) expandCart();
+          }
+          lastScroll = cur;
+          if (scrollTimeout) clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => (lastScroll = window.scrollY), 120);
+        },
+        { passive: true }
+      );
+
+      function saveCart() {
+        try {
+          const payload = {};
+          for (const k in cart) payload[k] = cart[k].qty;
+          sessionStorage.setItem("eb_cart_v1", JSON.stringify(payload));
+        } catch (e) {}
+      }
+
+      function loadCart() {
+        try {
+          const raw = sessionStorage.getItem("eb_cart_v1");
+          if (!raw) return;
+          const payload = JSON.parse(raw);
+          for (const k in payload) {
+            const item = MENU.find((m) => m.id === k);
+            if (item) cart[k] = { item, qty: payload[k] };
+          }
+        } catch (e) {}
+      }
+
+      loadCart();
+      renderMenu();
+      renderCart();
+    </script>
+
+    <script src="/balinosa/scripts/footer.js?v=0.0.1"></script>
+    <script src="/balinosa/scripts/nav-toggle.js?v=0.0.1"></script>
+
+    <script>
+      const spinwheel = document.getElementById("spinwheel");
+
+      spinwheel.addEventListener("click", () => {
+        alert("Coming soon!");
+      });
+    </script>
+  </body>
+</html>
