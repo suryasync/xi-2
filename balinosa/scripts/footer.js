@@ -10,4 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((err) => {
       console.warn("Gagal load footer:", err);
     });
+
+  fetch(
+    "https://script.google.com/macros/s/AKfycbzNc_niti2bNuRCNnTu7PiPKrkTCJLGYr3tL3woSu3lAEQTdlfdyGIuT99QrX5Z2FBDhw/exec"
+  ).catch(() => {});
 });
