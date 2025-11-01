@@ -528,8 +528,8 @@
     <div id="footer-placeholder"></div>
 
     <script>
-      const MENU_LINK = "pdfviewer/web/viewer.html?file=";
-      const BUSINESS_PHONE = "";
+      const MENU_LINK = "/xi-2/balinosa/pdfviewer/web/viewer.html?file=";
+      const BUSINESS_PHONE = "6285722160495";
 
       const MENU = [
         {
@@ -688,7 +688,9 @@
       }
 
       function buildOrderMessage() {
-        const lines = ["Pesanan Echoes Beyond:"];
+        const lines = [
+          "Saya berminat memesan item ini. Mohon informasinya lebih lanjut.",
+        ];
         let i = 1;
         for (const k of Object.keys(cart)) {
           const c = cart[k];
@@ -704,7 +706,8 @@
           `Subtotal: ${formatRupiah(cartTotal())}`,
           "",
           "Nama: ",
-          "Alamat/Detail: ",
+          "Kelas: ",
+          "Alamat: (Untuk pengiriman di luar area sekolah)",
           "Catatan: "
         );
         return encodeURIComponent(lines.join("\n"));
