@@ -529,10 +529,16 @@
           Lengkapi Data Pesanan
         </h3>
         <div style="font-size: 13px; color: #444; margin-bottom: 8px">
-          Isi nama, kelas, alamat (opsional), dan catatan
+          Isi nama, kelas, no. whatsapp, alamat, dan catatan.
         </div>
         <div class="eb-row"><input id="ebName" placeholder="Nama" /></div>
         <div class="eb-row"><input id="ebClass" placeholder="Kelas" /></div>
+        <div class="eb-row">
+          <input
+            id="ebWhatsapp"
+            placeholder="Nomor Whatsapp (ex: 0812345678)"
+          />
+        </div>
         <div class="eb-row">
           <input id="ebAddress" placeholder="Alamat (opsional)" />
         </div>
@@ -613,6 +619,7 @@
       const ebModal = document.getElementById("ebModalBackdrop");
       const ebName = document.getElementById("ebName");
       const ebClass = document.getElementById("ebClass");
+      const ebWhatsapp = document.getElementById("ebWhatsapp");
       const ebAddress = document.getElementById("ebAddress");
       const ebNote = document.getElementById("ebNote");
       const ebCancel = document.getElementById("ebCancelBtn");
@@ -802,11 +809,12 @@
       ebSubmit.addEventListener("click", async () => {
         const name = ebName.value.trim();
         const klass = ebClass.value.trim();
+        const whatsapp = ebWhatsapp.value.trim();
         const address = ebAddress.value.trim();
         const note = ebNote.value.trim();
-        if (!name || !klass) {
+        if (!name || !klass || !whatsapp) {
           ebDebug.style.display = "block";
-          ebDebug.textContent = "Mohon isi Nama dan Kelas";
+          ebDebug.textContent = "Mohon isi Nama, Kelas dan Nomor Whatsapp.";
           return;
         }
         const items = buildItemsTextAndPayload();
@@ -850,6 +858,7 @@
 
           addField("name", name);
           addField("klass", klass);
+          addField("whatsapp", whatsapp);
           addField("address", address);
           addField("note", note);
           addField("itemsText", items.text);
