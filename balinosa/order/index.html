@@ -828,13 +828,9 @@
         const clientToken =
           Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
-        // open blank window immediately (user gesture) to avoid popup blocker
-        let waWin = null;
-        try {
-          waWin = window.open("about:blank", "_blank");
-        } catch (e) {
-          waWin = null;
-        }
+        // removed pre-opened about:blank; use single open when URL ready
+        let didOpenWa = false;
+        const waWindowName = "eb_wa_win";
 
         ebSubmit.disabled = true;
         const origText = ebSubmit.textContent;
@@ -896,6 +892,7 @@
               });
               const json = await res.json();
               if (json && json.success && json.row) {
+                if (found) return;
                 found = true;
                 clearInterval(poll);
                 const row = json.row;
@@ -935,23 +932,30 @@
                   waLines.join("\n")
                 )}`;
                 console.log("POLLER WA URL ->", waUrl);
-                if (waWin && !waWin.closed) {
-                  try {
-                    waWin.location.href = waUrl;
-                  } catch (e) {
-                    window.open(waUrl, "_blank");
+
+                // mark opened BEFORE attempting to open to avoid races
+                try {
+                  if (!didOpenWa) {
+                    // reuse named window to avoid multiple tabs
+                    window.open(waUrl, waWindowName);
+                    didOpenWa = true;
                   }
-                } else {
-                  window.open(waUrl, "_blank");
+                } catch (e) {
+                  if (!didOpenWa) {
+                    window.open(waUrl, "_blank");
+                    didOpenWa = true;
+                  }
                 }
+
                 ebDebug.style.display = "none";
                 ebSubmit.disabled = false;
                 ebSubmit.textContent = origText;
-                cart = {};
+                for (const k in cart) delete cart[k];
                 renderCart();
                 closeModal();
               } else {
                 if (Date.now() - startAt > TIMEOUT_MS) {
+                  if (found) return;
                   clearInterval(poll);
                   // fallback: open WA without order id
                   const waLines = [];
@@ -984,21 +988,25 @@
                   const fallbackUrl = `https://wa.me/${BUSINESS_PHONE}?text=${encodeURIComponent(
                     waLines.join("\n")
                   )}`;
-                  if (waWin && !waWin.closed) {
-                    try {
-                      waWin.location.href = fallbackUrl;
-                    } catch (e) {
-                      window.open(fallbackUrl, "_blank");
+
+                  try {
+                    if (!didOpenWa) {
+                      window.open(fallbackUrl, waWindowName);
+                      didOpenWa = true;
                     }
-                  } else {
-                    window.open(fallbackUrl, "_blank");
+                  } catch (e) {
+                    if (!didOpenWa) {
+                      window.open(fallbackUrl, "_blank");
+                      didOpenWa = true;
+                    }
                   }
+
                   ebDebug.style.display = "block";
                   ebDebug.textContent =
                     "Order dikirim; Order ID belum tersedia (timeout).";
                   ebSubmit.disabled = false;
                   ebSubmit.textContent = origText;
-                  cart = {};
+                  for (const k in cart) delete cart[k];
                   renderCart();
                   closeModal();
                 }
