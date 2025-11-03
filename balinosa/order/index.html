@@ -576,6 +576,7 @@
       const MENU_LINK =
         "/xi-2/balinosa/pdfviewer/web/viewer.html?file=/xi-2/balinosa/assets/menu-po.pdf";
       const BUSINESS_PHONE = "6282124982599";
+      const rekening_bca = 3462577491;
 
       const APPS_SCRIPT_SUBMIT =
         "https://script.google.com/macros/s/AKfycbwLvt720xtfWwSlQQ7SIqWLgpDKr4Df-ZTnOZ9q15QIXFYchpld5s_fNXDojrl7X2wKaw/exec";
@@ -928,6 +929,10 @@
                 );
                 if (address) waLines.push(`Alamat: ${address}`);
                 if (note) waLines.push(`Catatan: ${note}`);
+                waLines.push(
+                  "",
+                  `Untuk pembayaran via transfer, silakan kirim ke rekening BCA: ${rekening_bca}`
+                );
                 const waUrl = `https://wa.me/${BUSINESS_PHONE}?text=${encodeURIComponent(
                   waLines.join("\n")
                 )}`;
