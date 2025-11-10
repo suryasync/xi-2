@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Echoes Beyond - Spin Wheel</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/xi-2/balinosa/assets/image/favicon.ico"
+    />
+    <link rel="stylesheet" href="/xi-2/balinosa/styles/main.css?v=0.0.3" />
+    <style>
+      :root {
+        --card-width: 720px;
+        --wheel-size: 440px;
+        --pointer-width: 28px;
+        --pointer-height: 20px;
+        --bg: #fff;
+        --accent: #04ad96;
+      }
+
+      body {
+        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: #f6f8fb;
+        margin: 0;
+        padding: 0;
+      }
+
+      .spin-wrap {
+        width: 100%;
+        max-width: var(--card-width);
+        margin: 24px auto;
+        padding: 28px;
+        background: var(--bg);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(11, 18, 32, 0.04);
+      }
+
+      .sw-header {
+        text-align: center;
+        margin-bottom: 14px;
+      }
+
+      .sw-header h2 {
+        margin: 0;
+        color: #eb4a5c;
+        font-size: 1.9rem;
+      }
+
+      .sw-header .small {
+        margin: 6px 0 0;
+        color: #6b7280;
+        font-size: 0.95rem;
+        margin-bottom: 50px;
+      }
+
+      .wheel-stage {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .wheel-box {
+        width: var(--wheel-size);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .wheel-container {
+        width: var(--wheel-size);
+        height: var(--wheel-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background: linear-gradient(180deg, #fff, #fbfdff);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(11, 18, 32, 0.06);
+        overflow: visible;
+      }
+
+      .wheel-svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .pointer-area {
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        pointer-events: none;
+        z-index: 30;
+      }
+
+      .pointer {
+        width: 0;
+        height: 0;
+        border-left: calc(var(--pointer-width) / 2) solid transparent;
+        border-right: calc(var(--pointer-width) / 2) solid transparent;
+        border-bottom: var(--pointer-height) solid #ef4444; /* triangle pointing down onto wheel */
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
+      }
+
+      .pointer-label {
+        margin-top: 6px;
+        font-size: 0.82rem;
+        color: #6b7280;
+      }
+
+      .controls {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 12px;
+      }
+
+      .spin-full {
+        width: calc(var(--wheel-size) * 0.78);
+        max-width: 420px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+      }
+
+      .spin-full[disabled] {
+        opacity: 0.6;
+        cursor: default;
+      }
+
+      .status {
+        margin-top: 14px;
+        min-height: 56px;
+        text-align: center;
+      }
+
+      .qr-wrap {
+        display: none;
+        margin-top: 12px;
+        text-align: center;
+        width: 100%;
+      }
+
+      .qr-canvas {
+        display: block;
+        margin: 8px auto;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        background: #fff;
+      }
+
+      .qr-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 8px;
+      }
+
+      .btn-ghost {
+        background: #fff;
+        border: 1px solid #e6eefc;
+        color: var(--accent);
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .small {
+        font-size: 0.92rem;
+        color: #6b7280;
+      }
+
+      @media (max-width: 820px) {
+        :root {
+          --wheel-size: 360px;
+          --card-width: 560px;
+        }
+        .spin-full {
+          width: calc(var(--wheel-size) * 0.82);
+        }
+      }
+
+      @media (max-width: 520px) {
+        :root {
+          --wheel-size: 300px;
+          --card-width: 340px;
+        }
+        .spin-wrap {
+          padding: 18px;
+        }
+        .sw-header h2 {
+          font-size: 1.1rem;
+        }
+        :root {
+          --pointer-width: 22px;
+          --pointer-height: 14px;
+        }
+        .spin-full {
+          width: 88%;
+          max-width: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header" role="banner">
+      <div class="container header-inner">
+        <a href="" class="logo-link" aria-label="Echoes Beyond Home"
+          ><span class="studio-name">Echoes Beyond | XI-2</span></a
+        >
+        <button
+          class="nav-toggle"
+          aria-controls="primary-navigation"
+          aria-expanded="false"
+          aria-label="Toggle navigation menu"
+        >
+          <span class="hamburger"></span>
+        </button>
+        <nav id="primary-navigation" class="nav" role="navigation">
+          <ul class="nav-list">
+            <li><a href="/xi-2/balinosa" class="nav-link">Home</a></li>
+            <li>
+              <a
+                href="/xi-2/balinosa/spinwheel/"
+                class="nav-link"
+                aria-current="page"
+                >Spin Wheel</a
+              >
+            </li>
+            <li><a href="/xi-2/balinosa/order/" class="nav-link">Order</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main style="display: flex; justify-content: center; padding: 32px">
+      <section class="spin-wrap" aria-labelledby="sw-title">
+        <div class="sw-header">
+          <h2 id="sw-title">Spin Wheel</h2>
+          <div class="small">You can only spin once.</div>
+        </div>
+
+        <div class="wheel-stage">
+          <div class="wheel-box" id="spinArea">
+            <div
+              class="wheel-container"
+              id="wheelContainer"
+              aria-hidden="false"
+            >
+              <svg
+                id="wheelSvg"
+                class="wheel-svg"
+                viewBox="-1 -1 2 2"
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                aria-label="Wheel hadiah"
+              >
+                <g id="wheelSlices" transform="rotate(0)"></g>
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="0.28"
+                  fill="#fff"
+                  stroke="#e6eefc"
+                  stroke-width="0.01"
+                ></circle>
+                <text
+                  x="0"
+                  y="0.02"
+                  text-anchor="middle"
+                  font-size="0.08"
+                  font-weight="700"
+                  fill="#04ad96"
+                  style="font-family: Poppins, sans-serif"
+                >
+                  SPIN
+                </text>
+              </svg>
+              <div class="pointer-area" aria-hidden="true">
+                <div class="pointer" id="fixedPointer"></div>
+                <div class="pointer-label">Pointer</div>
+              </div>
+            </div>
+
+            <div class="controls">
+              <button id="spinBtn" class="spin-full">SPIN NOW!</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div id="qrWrap" class="qr-wrap" aria-hidden="true">
+          <p class="small">Show this QR code to the booth attendant.</p>
+          <canvas
+            id="qrCanvas"
+            class="qr-canvas"
+            width="400"
+            height="400"
+            aria-hidden="true"
+          ></canvas>
+          <div class="qr-actions">
+            <button id="saveQrBtn" class="btn-ghost" disabled>
+              Download QR
+            </button>
+            <button id="openQrBtn" class="btn-ghost">
+              Open QR in a new tab
+            </button>
+          </div>
+          <div
+            id="qrMsg"
+            class="small"
+            style="margin-top: 8px; color: #b00"
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+    <script>
+      const CREATE_WEBAPP_URL =
+        "https://script.google.com/macros/s/AKfycbyCVrl_rX83c7jZPe8c67Ca5Nj7I3k0ya5VaEXl3hRc6c2dLlMT8hFo6nBLWrmlLBPUYQ/exec";
+      const REDEEM_WEBAPP_URL =
+        "https://script.google.com/macros/s/AKfycbwdZbUUs7Hys8yM01k34ZqfN0ztZw7f2rIQaiq3hguOadrfzncm7lGbRGCFgBM22IsTlg/exec";
+
+      const LOCAL_KEY = "eb_spin_v1";
+      const REWARDS = [
+        {
+          id: "R01",
+          label: "ZONK",
+          desc: "Tidak mendapatkan apapun.",
+          weight: 40,
+          color: "#fffbf7",
+        },
+        {
+          id: "R02",
+          label: "5% OFF",
+          desc: "Diskon 5%",
+          weight: 30,
+          color: "#eef6ff",
+        },
+        {
+          id: "R03",
+          label: "10% OFF",
+          desc: "Diskon 10%",
+          weight: 15,
+          color: "#fff7ef",
+        },
+        {
+          id: "R04",
+          label: "20% OFF",
+          desc: "Diskon 20%",
+          weight: 10,
+          color: "#fff1f2",
+        },
+        {
+          id: "R05",
+          label: "30% OFF",
+          desc: "Diskon 30%",
+          weight: 5,
+          color: "#f0fff4",
+        },
+      ];
+
+      const wheelSlices = document.getElementById("wheelSlices");
+      const spinBtn = document.getElementById("spinBtn");
+      const statusEl = document.getElementById("status");
+      const qrWrap = document.getElementById("qrWrap");
+      const qrCanvas = document.getElementById("qrCanvas");
+      const saveQrBtn = document.getElementById("saveQrBtn");
+      const openQrBtn = document.getElementById("openQrBtn");
+      const qrMsg = document.getElementById("qrMsg");
+      const spinArea = document.getElementById("spinArea");
+
+      function buildWheel() {
+        wheelSlices.innerHTML = "";
+        const total = REWARDS.reduce((s, r) => s + r.weight, 0);
+        let angleStart = 0;
+        REWARDS.forEach((r, idx) => {
+          const angle = (r.weight / total) * 360;
+          const startRad = ((angleStart - 90) * Math.PI) / 180;
+          const endRad = ((angleStart + angle - 90) * Math.PI) / 180;
+          const x1 = Math.cos(startRad),
+            y1 = Math.sin(startRad);
+          const x2 = Math.cos(endRad),
+            y2 = Math.sin(endRad);
+          const path = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path"
+          );
+          const large = angle > 180 ? 1 : 0;
+          const d = `M 0 0 L ${x1.toFixed(5)} ${y1.toFixed(
+            5
+          )} A 1 1 0 ${large} 1 ${x2.toFixed(5)} ${y2.toFixed(5)} Z`;
+          path.setAttribute("d", d);
+          path.setAttribute("fill", r.color || (idx % 2 ? "#fbfbff" : "#fff"));
+          path.setAttribute("stroke", "#e6eefc");
+          path.setAttribute("stroke-width", "0.003");
+          wheelSlices.appendChild(path);
+
+          const midAng = ((angleStart + angle / 2 - 90) * Math.PI) / 180;
+          const lx = Math.cos(midAng) * 0.66;
+          const ly = Math.sin(midAng) * 0.66;
+          const text = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+          );
+          text.setAttribute("x", lx.toFixed(4));
+          text.setAttribute("y", ly.toFixed(4));
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("font-size", "0.055");
+          text.setAttribute("fill", "#0b1220");
+          text.setAttribute("font-family", "Poppins, sans-serif");
+          text.setAttribute("font-weight", "700");
+          const rotateDeg = angleStart + angle / 2;
+          const normalized = (rotateDeg + 360) % 360;
+          const labelRotation =
+            normalized > 90 && normalized < 270 ? rotateDeg + 180 : rotateDeg;
+          text.setAttribute(
+            "transform",
+            `rotate(${labelRotation} ${lx} ${ly})`
+          );
+          text.textContent = r.label;
+          wheelSlices.appendChild(text);
+
+          angleStart += angle;
+        });
+
+        wheelSlices.style.transformOrigin = "50% 50%";
+        wheelSlices.style.transformBox = "fill-box";
+      }
+
+      function weightedPick() {
+        const total = REWARDS.reduce((s, r) => s + r.weight, 0);
+        let rnd = Math.random() * total;
+        for (const r of REWARDS) {
+          if (rnd < r.weight) return r;
+          rnd -= r.weight;
+        }
+        return REWARDS[REWARDS.length - 1];
+      }
+
+      function saveLocal(obj) {
+        try {
+          localStorage.setItem(LOCAL_KEY, JSON.stringify(obj));
+        } catch (e) {}
+      }
+      function loadLocal() {
+        try {
+          const s = localStorage.getItem(LOCAL_KEY);
+          return s ? JSON.parse(s) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function showQRArea() {
+        spinArea.style.display = "none";
+        qrWrap.style.display = "block";
+        qrWrap.setAttribute("aria-hidden", "false");
+      }
+      function showSpinArea() {
+        qrWrap.style.display = "none";
+        qrWrap.setAttribute("aria-hidden", "true");
+        spinArea.style.display = "flex";
+      }
+
+      function renderExisting() {
+        const ex = loadLocal();
+        if (!ex) return false;
+        statusEl.innerHTML = `<strong>Your Voucher:</strong> ${ex.label} <div class="small">Kode: ${ex.code}</div>`;
+        const qrUrl = `${REDEEM_WEBAPP_URL}?id=${encodeURIComponent(ex.code)}`;
+        const size = Math.min(
+          360,
+          Math.max(160, Math.floor(window.innerWidth * 0.45))
+        );
+        QRCode.toCanvas(
+          qrCanvas,
+          qrUrl,
+          { width: size, margin: 1 },
+          function (err) {
+            if (!err) {
+              saveQrBtn.disabled = false;
+              saveQrBtn.dataset.url = qrCanvas.toDataURL("image/png");
+              qrMsg.textContent = "";
+              showQRArea();
+            } else {
+              saveQrBtn.disabled = true;
+              qrMsg.textContent = "Failed generate QR";
+              showSpinArea();
+            }
+          }
+        );
+        return true;
+      }
+
+      function sendCreate(entry, timeout = 9000) {
+        return new Promise((resolve) => {
+          const cb = "cb_" + Math.random().toString(36).slice(2);
+          let settled = false;
+          window[cb] = function (resp) {
+            if (settled) return;
+            settled = true;
+            try {
+              delete window[cb];
+            } catch (e) {}
+            if (script.parentNode) script.parentNode.removeChild(script);
+            return resolve(resp || { ok: true });
+          };
+
+          const params = new URLSearchParams({
+            action: "create",
+            callback: cb,
+            code: entry.code,
+            rewardId: entry.rewardId,
+            label: entry.label,
+            desc: entry.desc,
+            rarityWeight: String(entry.rarityWeight),
+            createdAt: entry.createdAt,
+          });
+
+          const script = document.createElement("script");
+          script.src = CREATE_WEBAPP_URL + "?" + params.toString();
+          script.async = true;
+          script.onerror = function () {
+            if (settled) return;
+            settled = true;
+            try {
+              delete window[cb];
+            } catch (e) {}
+            if (script.parentNode) script.parentNode.removeChild(script);
+            doFormFallback();
+          };
+          document.head.appendChild(script);
+
+          const t = setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            try {
+              delete window[cb];
+            } catch (e) {}
+            if (script.parentNode) script.parentNode.removeChild(script);
+            doFormFallback();
+          }, timeout);
+
+          function doFormFallback() {
+            try {
+              let f = document.getElementById("__createForm");
+              if (!f) {
+                f = document.createElement("form");
+                f.id = "__createForm";
+                f.style.display = "none";
+                f.method = "POST";
+                f.target = "postTarget";
+                f.innerHTML =
+                  '<input name="action" value="create" /><input name="code" /><input name="rewardId" /><input name="label" /><input name="desc" /><input name="rarityWeight" /><input name="createdAt" />';
+                document.body.appendChild(f);
+              }
+              f.querySelector('input[name="code"]').value = entry.code;
+              f.querySelector('input[name="rewardId"]').value = entry.rewardId;
+              f.querySelector('input[name="label"]').value = entry.label;
+              f.querySelector('input[name="desc"]').value = entry.desc;
+              f.querySelector('input[name="rarityWeight"]').value =
+                entry.rarityWeight;
+              f.querySelector('input[name="createdAt"]').value =
+                entry.createdAt;
+
+              let iframe = document.getElementById("postTarget");
+              if (!iframe) {
+                iframe = document.createElement("iframe");
+                iframe.id = "postTarget";
+                iframe.name = "postTarget";
+                iframe.style.display = "none";
+                document.body.appendChild(iframe);
+              }
+              f.action = CREATE_WEBAPP_URL;
+              f.submit();
+              return resolve({ ok: true, fallback: "form" });
+            } catch (e) {
+              return resolve({ ok: false, error: "all_failed" });
+            }
+          }
+        });
+      }
+
+      function computeAlignmentDegrees(sliceStartDeg, sliceAngleDeg) {
+        const sliceCenter = (sliceStartDeg + sliceAngleDeg / 2) % 360;
+        const align = (360 - sliceCenter) % 360;
+        return align;
+      }
+
+      async function doSpin() {
+        if (loadLocal()) {
+          renderExisting();
+          return;
+        }
+        spinBtn.disabled = true;
+        statusEl.textContent = "Spinning...";
+        const chosen = weightedPick();
+        const code = "EB" + Date.now().toString(36).toUpperCase().slice(-8);
+        const payload = {
+          code,
+          rewardId: chosen.id,
+          label: chosen.label,
+          desc: chosen.desc,
+          rarityWeight: chosen.weight,
+          createdAt: new Date().toISOString(),
+        };
+
+        const srv = await sendCreate(payload).catch((e) => ({
+          ok: false,
+          error: e && e.message,
+        }));
+        if (!srv || !srv.ok) {
+          statusEl.innerHTML = `Failed to save. Please try again. <span class="small">${
+            srv?.error || ""
+          }</span>`;
+          spinBtn.disabled = false;
+          return;
+        }
+
+        const total = REWARDS.reduce((s, r) => s + r.weight, 0);
+        let start = 0,
+          sliceStart = 0,
+          sliceAngle = 0;
+        for (const r of REWARDS) {
+          const a = (r.weight / total) * 360;
+          if (r.id === chosen.id) {
+            sliceStart = start;
+            sliceAngle = a;
+            break;
+          }
+          start += a;
+        }
+
+        const spins = 6 + Math.floor(Math.random() * 4);
+        const align = computeAlignmentDegrees(sliceStart, sliceAngle);
+        const target = spins * 360 + align;
+
+        const duration = 9000;
+        wheelSlices.style.transition = `transform ${duration}ms cubic-bezier(.22,.9,.28,1)`;
+        wheelSlices.style.transform = `rotate(${target}deg)`;
+
+        spinBtn.disabled = true;
+
+        const finishHandler = () => {
+          const rotation = target % 360;
+          wheelSlices.style.transition = "";
+          wheelSlices.style.transform = `rotate(${rotation}deg)`;
+          statusEl.innerHTML = `<strong>Congratulations!</strong> ${chosen.label} — ${chosen.desc} <div class="small">Code: ${code}</div>`;
+          const qrUrl = `${REDEEM_WEBAPP_URL}?id=${encodeURIComponent(code)}`;
+          const size = Math.min(
+            360,
+            Math.max(160, Math.floor(window.innerWidth * 0.45))
+          );
+          QRCode.toCanvas(
+            qrCanvas,
+            qrUrl,
+            { width: size, margin: 1 },
+            function (err) {
+              if (!err) {
+                saveQrBtn.disabled = false;
+                saveQrBtn.dataset.url = qrCanvas.toDataURL("image/png");
+                qrMsg.textContent = "";
+                showQRArea();
+              } else {
+                saveQrBtn.disabled = true;
+                qrMsg.textContent = "Failed to generate QR";
+                showSpinArea();
+              }
+            }
+          );
+          saveLocal(Object.assign({}, payload, { serverRow: srv.row || null }));
+          spinBtn.disabled = true;
+          wheelSlices.removeEventListener("transitionend", finishHandler);
+        };
+
+        wheelSlices.addEventListener("transitionend", finishHandler);
+        setTimeout(() => {
+          if (wheelSlices.style.transition) {
+            finishHandler();
+          }
+        }, duration + 400);
+      }
+
+      saveQrBtn.addEventListener("click", function () {
+        const dataUrl = this.dataset.url || "";
+        if (!dataUrl) {
+          qrMsg.textContent = "No QR code.";
+          return;
+        }
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = (loadLocal()?.code || "qr") + ".png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+
+      openQrBtn.addEventListener("click", function () {
+        const ex = loadLocal();
+        if (!ex) {
+          qrMsg.textContent = "No QR code.";
+          return;
+        }
+        const qrUrl = `${REDEEM_WEBAPP_URL}?id=${encodeURIComponent(ex.code)}`;
+        window.open(qrUrl, "_blank");
+      });
+
+      buildWheel();
+      if (!renderExisting()) {
+        showSpinArea();
+      }
+      spinBtn.addEventListener("click", doSpin);
+
+      let resizeTimer;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (qrWrap.style.display === "block" && loadLocal()) {
+            const ex = loadLocal();
+            const qrUrl = `${REDEEM_WEBAPP_URL}?id=${encodeURIComponent(
+              ex.code
+            )}`;
+            const size = Math.min(
+              360,
+              Math.max(160, Math.floor(window.innerWidth * 0.45))
+            );
+            QRCode.toCanvas(
+              qrCanvas,
+              qrUrl,
+              { width: size, margin: 1 },
+              () => {}
+            );
+          }
+        }, 200);
+      });
+    </script>
+
+    <script src="/xi-2/balinosa/scripts/footer.js?v=0.0.3"></script>
+    <script src="/xi-2/balinosa/scripts/nav-toggle.js?v=0.0.3"></script>
+  </body>
+</html>
