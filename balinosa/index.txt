@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8" />
+<html class="no-js" lang="en-US">
+  <!--<!
+  [endif]--><head>
+    <title>challenges.cloudflare.com | 500: Internal server error</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>qonz.eu.org | 500: Internal server error</title>
     <link rel="stylesheet" id="cf_styles-css" href="styles.css" />
   </head>
   <body>
@@ -18,21 +20,18 @@
             <span class="inline-block">Internal server error</span>
             <span class="code-label">Error code 500</span>
           </h1>
-
           <div>
             Visit
             <a
-              href="https://cloudflare.com/5xx-error-landing?utm_source=errorcode_500&utm_campaign=qonz.eu.org"
+              href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_500&amp;utm_campaign=challenges.cloudflare.com"
               target="_blank"
               rel="noopener noreferrer"
               >cloudflare.com</a
             >
             for more information.
           </div>
-
-          <div id="cf-timestamp" class="mt-3" aria-live="polite">—</div>
+          <div class="mt-3">2025-11-18 13:12:40 UTC</div>
         </header>
-
         <div class="my-8 bg-gradient-gray">
           <div class="w-240 lg:w-full mx-auto">
             <div class="clearfix md:px-8">
@@ -54,18 +53,18 @@
                 >
                   Browser
                 </h3>
+
                 <span class="leading-1.3 text-2xl text-green-success"
                   >Working</span
                 >
               </div>
-
               <div
                 id="cf-cloudflare-status"
                 class="cf-error-source relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center"
               >
                 <div class="relative mb-10 md:m-0">
                   <a
-                    href="https://qonz.eu.org/5xx-error-landing?utm_source=errorcode_500&utm_campaign=qonz.eu.org"
+                    href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_500&amp;utm_campaign=challenges.cloudflare.com"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -77,21 +76,21 @@
                     ></span>
                   </a>
                 </div>
-
                 <span class="md:block w-full truncate">Singapore</span>
                 <h3
                   class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3"
                 >
                   <a
-                    href="https://cloudflare.com/5xx-error-landing?utm_source=errorcode_500&utm_campaign=qonz.eu.org"
+                    href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_500&amp;utm_campaign=challenges.cloudflare.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    >Cloudflare</a
                   >
+                    Cloudflare
+                  </a>
                 </h3>
+
                 <span class="leading-1.3 text-2xl text-red-error">Error</span>
               </div>
-
               <div
                 id="cf-host-status"
                 class="relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center"
@@ -104,13 +103,15 @@
                     class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"
                   ></span>
                 </div>
-
-                <span class="md:block w-full truncate">qonz.eu.org</span>
+                <span class="md:block w-full truncate"
+                  >challenges.cloudflare.com</span
+                >
                 <h3
                   class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3"
                 >
                   Host
                 </h3>
+
                 <span class="leading-1.3 text-2xl text-green-success"
                   >Working</span
                 >
@@ -129,7 +130,6 @@
               </h2>
               <p>There is an internal server error on Cloudflare's network.</p>
             </div>
-
             <div class="w-1/2 md:w-full float-left leading-relaxed">
               <h2 class="text-3xl font-normal leading-1.3 mb-4">
                 What can I do?
@@ -144,7 +144,7 @@
         >
           <p class="text-13">
             <span class="cf-footer-item sm:block sm:mb-1"
-              >Ray ID:
+              >Cloudflare Ray ID:
               <strong class="font-semibold">9a07b88419f986a5</strong></span
             >
             <span class="cf-footer-separator sm:hidden">•</span>
@@ -160,142 +160,36 @@
               >
                 Click to reveal
               </button>
-              <span class="hidden" id="cf-footer-ip">—</span>
+              <span class="hidden" id="cf-footer-ip">114.10.45.216</span>
               <span class="cf-footer-separator sm:hidden">•</span>
             </span>
             <span class="cf-footer-item sm:block sm:mb-1"
               ><span>Performance &amp; security by</span>
               <a
                 rel="noopener noreferrer"
-                href="https://cloudflare.com/5xx-error-landing?utm_source=errorcode_500&utm_campaign=qonz.eu.org"
+                href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_500&amp;utm_campaign=challenges.cloudflare.com"
                 id="brand_link"
                 target="_blank"
                 >Cloudflare</a
-              >
-            </span>
+              ></span
+            >
           </p>
-
           <script>
             (function () {
-              // Utilities
-              function pad(n) {
-                return n < 10 ? "0" + n : String(n);
+              function d() {
+                var b = a.getElementById("cf-footer-item-ip"),
+                  c = a.getElementById("cf-footer-ip-reveal");
+                b &&
+                  "classList" in b &&
+                  (b.classList.remove("hidden"),
+                  c.addEventListener("click", function () {
+                    c.classList.add("hidden");
+                    a.getElementById("cf-footer-ip").classList.remove("hidden");
+                  }));
               }
-              function formatUTC(date) {
-                return (
-                  date.getUTCFullYear() +
-                  "-" +
-                  pad(date.getUTCMonth() + 1) +
-                  "-" +
-                  pad(date.getUTCDate()) +
-                  " " +
-                  pad(date.getUTCHours()) +
-                  ":" +
-                  pad(date.getUTCMinutes()) +
-                  ":" +
-                  pad(date.getUTCSeconds()) +
-                  " UTC"
-                );
-              }
-
-              // Elements
-              var doc = document;
-              var timestampEl = doc.getElementById("cf-timestamp");
-              var ipEl = doc.getElementById("cf-footer-ip");
-              var revealBtn = doc.getElementById("cf-footer-ip-reveal");
-
-              // Live UTC timestamp (updates every second)
-              function updateTimestamp() {
-                if (timestampEl)
-                  timestampEl.textContent = formatUTC(new Date());
-              }
-              updateTimestamp();
-              setInterval(updateTimestamp, 1000);
-
-              // IP retrieval logic with multiple fallbacks:
-              // 1) Try several CORS-friendly endpoints
-              // 2) Try JSONP (api.ipify supports JSONP)
-              // 3) Final fallback: show message instructing to use server proxy
-              var endpoints = [
-                "https://api.ipify.org?format=json",
-                "https://api64.ipify.org?format=json",
-                "https://ifconfig.co/json",
-                "https://ipinfo.io/json",
-              ];
-
-              function setIP(text) {
-                if (!ipEl) return;
-                ipEl.textContent = text;
-              }
-
-              function finalFallback() {
-                setIP("Unavailable (CORS). Use server proxy.");
-              }
-
-              function tryFetchList(list, i) {
-                if (i >= list.length) return tryJSONP();
-                fetch(list[i], { cache: "no-store", mode: "cors" })
-                  .then(function (res) {
-                    if (!res.ok) throw new Error("non-200");
-                    return res.json();
-                  })
-                  .then(function (json) {
-                    var ip =
-                      json &&
-                      (json.ip ||
-                        json.IP ||
-                        json.ip_address ||
-                        json.address ||
-                        json.client_ip);
-                    setIP(ip || "Unavailable");
-                  })
-                  .catch(function () {
-                    tryFetchList(list, i + 1);
-                  });
-              }
-
-              // JSONP fallback using api.ipify.org
-              function tryJSONP() {
-                var cbName = "jsonp_ip_cb_" + Date.now();
-                var scriptId = cbName + "_s";
-                window[cbName] = function (data) {
-                  try {
-                    delete window[cbName];
-                  } catch (e) {}
-                  var ip = (data && (data.ip || data.IP)) || "Unavailable";
-                  setIP(ip);
-                  cleanup();
-                };
-                function cleanup() {
-                  var s = document.getElementById(scriptId);
-                  if (s) s.parentNode.removeChild(s);
-                  try {
-                    delete window[cbName];
-                  } catch (e) {}
-                }
-                var s = document.createElement("script");
-                s.id = scriptId;
-                s.src = "https://api.ipify.org?format=jsonp&callback=" + cbName;
-                s.onerror = function () {
-                  cleanup();
-                  finalFallback();
-                };
-                document.head.appendChild(s);
-              }
-
-              // Click handler: hide button, show ip area, attempt retrieval
-              if (revealBtn && ipEl) {
-                revealBtn.addEventListener(
-                  "click",
-                  function () {
-                    revealBtn.classList.add("hidden");
-                    ipEl.classList.remove("hidden");
-                    setIP("Fetching...");
-                    tryFetchList(endpoints, 0);
-                  },
-                  { once: true }
-                );
-              }
+              var a = document;
+              document.addEventListener &&
+                a.addEventListener("DOMContentLoaded", d);
             })();
           </script>
         </div>
