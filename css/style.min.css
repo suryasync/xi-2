@@ -326,8 +326,8 @@ tbody tr:hover {
 
 .ads-container iframe {
   width: 100%; /* menyesuaikan layar */
-  max-width: 468px; /* batas maksimal sesuai ukuran iklan */
-  height: 60px; /* tinggi tetap */
+  max-width: 728px; /* batas maksimal sesuai ukuran iklan */
+  height: 90px; /* tinggi tetap */
   border: none; /* hilangkan border default */
 }
 
