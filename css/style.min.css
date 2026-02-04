@@ -180,7 +180,9 @@ main {
   border-radius: 8px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .card:hover {
@@ -283,7 +285,9 @@ tbody tr:hover {
   border: 1px solid var(--clr-border);
   border-radius: 4px;
   font-size: 1rem;
-  transition: border-color var(--transition), box-shadow var(--transition);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
 }
 
 .search input:focus,
@@ -312,6 +316,19 @@ tbody tr:hover {
   margin: 0;
   font-size: 0.9rem;
   font-family: var(--font-base);
+}
+
+.ads-container {
+  display: flex;
+  justify-content: center; /* selalu di tengah */
+  margin: 20px 0; /* jarak atas-bawah */
+}
+
+.ads-container iframe {
+  width: 100%; /* menyesuaikan layar */
+  max-width: 468px; /* batas maksimal sesuai ukuran iklan */
+  height: 60px; /* tinggi tetap */
+  border: none; /* hilangkan border default */
 }
 
 @keyframes fadeIn {
