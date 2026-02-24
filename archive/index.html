@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XI-2 SMANSA</title>
+    <link rel="icon" href="img/ico.jpg" type="image/x-icon" />
+    <link rel="stylesheet" href="css/style.min.css?v=0.0.4" />
+
+    <script src="https://pl28647327.effectivegatecpm.com/8c/67/78/8c677812fd8ef224a9c01327372ff15a.js"></script>
+    <script src="https://developdomicile.com/8c/67/78/8c677812fd8ef224a9c01327372ff15a.js"></script>
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="container header__inner">
+        <a href="" class="header__logo">XI-2</a>
+
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+        <label
+          for="nav-toggle"
+          class="nav-toggle-label"
+          aria-label="Toggle navigation menu"
+        >
+          <span></span>
+        </label>
+
+        <nav class="nav">
+          <ul class="nav__list">
+            <li>
+              <a href="#home" class="nav__link nav__link--active">Home</a>
+            </li>
+            <li><a href="#siswa" class="nav__link">Daftar Siswa</a></li>
+            <li><a href="#agenda" class="nav__link">Agenda</a></li>
+            <li><a href="#jadwal" class="nav__link">Jadwal</a></li>
+            <li><a href="#balinosa" class="nav__link">Balinosa</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div style="background-color: #faf9f8; padding: 8px">
+      <marquee behavior="scroll" direction="left" scrollamount="7">
+        Website ini akan menampilkan iklan mulai 4 Februari 2026 untuk menutup
+        biaya operasional. Kami mohon dukungan Anda dengan tidak menggunakan
+        Adblocker.
+      </marquee>
+    </div>
+
+    <!-- Container iklan -->
+    <div class="ads-container">
+      <script>
+        atOptions = {
+          key: "feb1a5dca2a9e8dfc8af7d6e800c016c",
+          format: "iframe",
+          height: 90,
+          width: 728,
+          params: {},
+        };
+      </script>
+      <script src="https://www.highperformanceformat.com/feb1a5dca2a9e8dfc8af7d6e800c016c/invoke.js"></script>
+    </div>
+
+    <main class="container">
+      <section id="home" class="section section--active">
+        <div class="stats">
+          <div class="card">
+            <h2>Total Siswa</h2>
+            <p id="count-siswa" class="count">0</p>
+          </div>
+          <div class="card">
+            <h2>Total Pelajaran</h2>
+            <p id="count-pelajaran" class="count">0</p>
+          </div>
+          <div class="card">
+            <h2>Total Agenda</h2>
+            <p id="count-agenda" class="count">0</p>
+          </div>
+        </div>
+
+        <p id="school-status" class="status">nil</p>
+
+        <div class="box">
+          <h2>Agenda Hari Ini</h2>
+          <ul id="list-agenda-today" class="agenda-list"></ul>
+        </div>
+
+        <div class="box">
+          <h2>Agenda Besok</h2>
+          <ul id="list-agenda-tomorrow" class="agenda-list"></ul>
+        </div>
+
+        <div class="box">
+          <h2>Struktur Organisasi</h2>
+          <ul id="list-roles" class="roles-list"></ul>
+        </div>
+
+        <p id="site-access" class="status">Total kunjungan situs: 0</p>
+      </section>
+
+      <section id="siswa" class="section">
+        <h2>Daftar Siswa</h2>
+        <div class="search">
+          <input type="text" id="search" placeholder="Cari nama atau NIS…" />
+          <select id="filter-piket" class="filter-piket">
+            <option value="">Filter Jadwal Piket / Peran</option>
+            <option>Senin</option>
+            <option>Selasa</option>
+            <option>Rabu</option>
+            <option>Kamis</option>
+            <option>Jumat</option>
+            <option>Ketua Murid</option>
+            <option>Wakil Ketua Murid</option>
+            <option>Bendahara</option>
+            <option>Sekretaris</option>
+            <option>S. Pendidikan</option>
+            <option>S. Absensi</option>
+            <option>S. Kebersihan</option>
+            <option>S. Keamanan</option>
+            <option>S. Kesehatan</option>
+            <option>S. Rohani</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table id="table-siswa" class="data-table">
+            <thead>
+              <tr>
+                <th>NIS</th>
+                <th>Nama</th>
+                <th>Peran</th>
+                <th>Piket</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="agenda" class="section">
+        <h2>Agenda Kelas</h2>
+        <div class="search">
+          <input type="date" id="filter-agenda-tanggal" />
+        </div>
+        <div class="table-wrap">
+          <table id="table-agenda" class="data-table">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Mata Pelajaran</th>
+                <th>Keterangan</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="jadwal" class="section">
+        <h2>Jadwal Pelajaran</h2>
+        <div class="table-wrap">
+          <table id="table-jadwal" class="data-table">
+            <thead>
+              <tr>
+                <th>Jam</th>
+                <th>Senin</th>
+                <th>Selasa</th>
+                <th>Rabu</th>
+                <th>Kamis</th>
+                <th>Jumat</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script
+      async="async"
+      data-cfasync="false"
+      src="https://pl28647189.effectivegatecpm.com/272de2db65777e90016df0b9d191b03f/invoke.js"
+    ></script>
+    <div id="container-272de2db65777e90016df0b9d191b03f"></div>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <p>© 2025 SDBS Studio Development</p>
+        <p>All Rights Reserved.</p>
+      </div>
+    </footer>
+
+    <script src="js/script.min.js?v=0.0.4" defer></script>
+  </body>
+</html>
